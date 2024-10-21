@@ -28,4 +28,4 @@ EXPOSE ${PORT}/tcp
 USER odoo
 
 # Utiliser le nouveau script comme point d'entrée
-CMD ["/entrypoint.sh"]
+CMD ["odoo", "--config=/etc/odoo/odoo.conf"]
