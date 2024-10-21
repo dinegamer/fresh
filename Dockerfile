@@ -3,29 +3,35 @@ FROM odoo:17.0
 USER root
 
 # Installation des dépendances nécessaires
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copie des addons personnalisés
-COPY ./addons /mnt/extra-addons/
+# Configuration des répertoires et permissions
+RUN mkdir -p /var/lib/odoo/.local/share/Odoo/filestore \
+    && chown -R odoo:odoo /var/lib/odoo
 
-# Configuration des assets
-RUN mkdir -p /var/lib/odoo/.local/share/Odoo/filestore
-RUN chown -R odoo:odoo /var/lib/odoo
+# Copie des fichiers de configuration
+COPY --chown=odoo:odoo ./config/odoo.conf /etc/odoo/
+COPY --chown=odoo:odoo ./entrypoint.sh /
+COPY --chown=odoo:odoo ./addons /mnt/extra-addons/
 
-# Copie de la configuration
-COPY ./config/odoo.conf /etc/odoo/
-
-# Créer le script d'initialisation
-COPY ./entrypoint.sh /
+# Rendre le script executable
 RUN chmod +x /entrypoint.sh
-RUN chown -R odoo:odoo /etc/odoo/odoo.conf /entrypoint.sh
 
-# Configuration du port
+# Configuration pour Render
 ENV PORT=8069
 ENV HOST=0.0.0.0
+ENV WORKERS=2
+
+# Exposition du port
 EXPOSE ${PORT}
 
+# Retour à l'utilisateur odoo
 USER odoo
 
-# Commande de démarrage
+# Configuration du healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/web/health || exit 1
+
 ENTRYPOINT ["/entrypoint.sh"]

@@ -1,31 +1,21 @@
 #!/bin/bash
+
 # Attendre que la base de données soit prête
-until psql postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME} -c '\q'; do
-  echo "Postgres is unavailable - sleeping"
-  sleep 1
+until PGPASSWORD=${DB_PASSWORD} psql -h ${DB_HOST} -U ${DB_USER} -d ${DB_NAME} -c '\q' 2>/dev/null; do
+  echo "Waiting for PostgreSQL..."
+  sleep 5
 done
 
-echo "Postgres is up - executing command"
+echo "PostgreSQL is up - executing command"
 
-# Initialiser la base de données et créer l'utilisateur admin
-odoo --stop-after-init --config=/etc/odoo/odoo.conf -i base --load-language=fr_FR --init=base \
-  --database=${DB_NAME} \
-  --db_host=${DB_HOST} \
-  --db_password=${DB_PASSWORD} \
-  --db_user=${DB_USER} \
-  --no-database-list
+# Initialisation de la base de données
+odoo --stop-after-init \
+     --config=/etc/odoo/odoo.conf \
+     --load-language=fr_FR \
+     -d ${DB_NAME} \
+     --db_host=${DB_HOST} \
+     --db_user=${DB_USER} \
+     --db_password=${DB_PASSWORD}
 
-# Restaurer les données si nécessaire (ajoutez cette partie)
-if [ -f "/mnt/extra-addons/backup.sql" ]; then
-    echo "Restauration des données..."
-    psql postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME} < /mnt/extra-addons/backup.sql
-fi
-
-# Nettoyer le cache et reconstruire les assets
-echo "Nettoyage du cache..."
-rm -rf /var/lib/odoo/.local/share/Odoo/sessions/*
-echo "Reconstruction des assets..."
-odoo --stop-after-init --config=/etc/odoo/odoo.conf -d ${DB_NAME} -u base --no-http
-
-# Démarrer Odoo
+# Démarrage d'Odoo
 exec odoo --config=/etc/odoo/odoo.conf
