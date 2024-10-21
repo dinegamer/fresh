@@ -10,13 +10,22 @@ COPY ./addons /mnt/extra-addons/
 
 # Copie de la configuration
 COPY ./config/odoo.conf /etc/odoo/
-RUN chown -R odoo /etc/odoo/odoo.conf
+
+COPY ./init.sql /docker-entrypoint-initdb.d/
+# Créer un script d'initialisation
+RUN echo '#!/bin/bash\n\
+odoo --stop-after-init --config=/etc/odoo/odoo.conf -i base\n\
+exec odoo --config=/etc/odoo/odoo.conf\n'\
+> /entrypoint.sh && chmod +x /entrypoint.sh
+
+RUN chown -R odoo /etc/odoo/odoo.conf /entrypoint.sh
 
 # Configuration du port
 ENV PORT=8069
 EXPOSE ${PORT}
+EXPOSE ${PORT}/tcp
 
 USER odoo
 
-# Commande de démarrage
-CMD ["odoo", "--config=/etc/odoo/odoo.conf"]
+# Utiliser le nouveau script comme point d'entrée
+CMD ["/entrypoint.sh"]
