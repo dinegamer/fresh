@@ -1,4 +1,5 @@
 FROM odoo:17.0
+
 USER root
 
 # Installation des dépendances nécessaires
@@ -11,10 +12,11 @@ COPY ./addons /mnt/extra-addons/
 COPY ./config/odoo.conf /etc/odoo/
 RUN chown -R odoo /etc/odoo/odoo.conf
 
+# Configuration du port
+ENV PORT=8069
+EXPOSE 8069
+
 USER odoo
 
-# Configuration explicite du port pour Render
-ENV PORT=8069
-
-# Commande de démarrage modifiée pour utiliser le port de l'environnement
-CMD ["odoo", "--config=/etc/odoo/odoo.conf", "--http-port=${PORT}"]
+# Commande de démarrage
+CMD ["odoo", "--config=/etc/odoo/odoo.conf"]

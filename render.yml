@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: odoo
+    env: python
+    buildCommand: pip install odoo
+    startCommand: odoo --config=/etc/odoo/odoo.conf
+    envVars:
+      - key: PORT
+        value: 8069
+      - key: DB_HOST
+        value: dpg-csarftogph6c73a5bmrg-a
+      - key: DB_USER
+        value: freshmarket
+      - key: DB_PASSWORD
+        value: fresh
+      - key: DB_NAME
+        value: freshmarket
