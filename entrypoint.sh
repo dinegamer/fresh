@@ -15,17 +15,17 @@ odoo --stop-after-init --config=/etc/odoo/odoo.conf -i base --load-language=fr_F
   --db_user=${DB_USER} \
   --no-database-list
 
-# Créer l'utilisateur admin si non existant
-psql postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME} << EOF
-DO \$\$
-BEGIN
-    IF NOT EXISTS (SELECT * FROM res_users WHERE login='admin') THEN
-        INSERT INTO res_users (login, password, active, company_id, partner_id)
-        VALUES ('admin', 'admin', true, 1, 1);
-    END IF;
-END
-\$\$;
-EOF
+# Restaurer les données si nécessaire (ajoutez cette partie)
+if [ -f "/mnt/extra-addons/backup.sql" ]; then
+    echo "Restauration des données..."
+    psql postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME} < /mnt/extra-addons/backup.sql
+fi
+
+# Nettoyer le cache et reconstruire les assets
+echo "Nettoyage du cache..."
+rm -rf /var/lib/odoo/.local/share/Odoo/sessions/*
+echo "Reconstruction des assets..."
+odoo --stop-after-init --config=/etc/odoo/odoo.conf -d ${DB_NAME} -u base --no-http
 
 # Démarrer Odoo
 exec odoo --config=/etc/odoo/odoo.conf

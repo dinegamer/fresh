@@ -8,6 +8,10 @@ RUN apt-get update && apt-get install -y postgresql-client
 # Copie des addons personnalisés
 COPY ./addons /mnt/extra-addons/
 
+# Configuration des assets
+RUN mkdir -p /var/lib/odoo/.local/share/Odoo/filestore
+RUN chown -R odoo:odoo /var/lib/odoo
+
 # Copie de la configuration
 COPY ./config/odoo.conf /etc/odoo/
 
