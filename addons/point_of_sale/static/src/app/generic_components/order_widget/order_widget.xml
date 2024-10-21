@@ -1,0 +1,48 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="point_of_sale.OrderWidget">
+        <t t-if="props.lines?.length">
+            <!-- Conteneur des lignes de commande -->
+            <div t-ref="scrollable" class="order-container bg-white overflow-y-auto flex-grow-1 d-flex flex-column text-start shadow-sm rounded-3" style="transition: all 0.3s ease;">
+                <t t-foreach="props.lines" t-as="line" t-key="line_index">
+                    <t t-slot="default" line="line"/>
+                </t>
+            </div>
+            <!-- Résumé de la commande -->
+            <div t-if="props.total or props.tax" class="order-summary w-100 py-2 px-3 bg-light text-end fw-bold fs-2 lh-sm animate__animated animate__fadeInUp rounded-bottom-3" style="box-shadow: 0 -4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+                Total:
+                <span t-esc="props.total" class="total ms-2" style="color: #4CAF50;"/>
+                <div t-if="props.tax" class="fs-6 text-muted subentry mt-1">
+                    Taxes: <span t-esc="props.tax" class="tax ms-2" style="color: #78909C;"/>
+                </div>
+            </div>
+            <t t-slot="details"/>
+        </t>
+        
+        <t t-else="">
+            <!-- Conteneur du panier vide -->
+            <div class="empty-cart-container d-flex justify-content-center align-items-center flex-column animate__animated animate__zoomIn"
+                style="gap: 1rem; padding: 2rem; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                
+                <!-- Conteneur pour les GIFs -->
+                <div class="gif-container d-flex justify-content-center align-items-center flex-wrap" style="gap: 1rem;">
+                    <img src="/web_editor/static/src/img/cart.gif" alt="Panier vide" style="width: 130px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);" class="cart-gif animate__animated animate__bounce"/>
+                    <img src="/web_editor/static/src/img/cart2.gif" alt="Panier vide 2" style="width: 130px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);" class="cart2-gif animate__animated animate__bounce"/>
+                </div>
+    
+                <!-- Texte du panier vide -->
+                <p style="color:#4CAF50; font-weight:bold; font-size:1.5rem; margin-top: 10px; text-align: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);" class="empty-cart-text animate__animated animate__fadeIn">
+                    <t t-esc="emptyCartText()"/>
+                </p>
+                
+                <!-- Bouton "Commencer vos achats" -->
+              <button class="btn btn-success btn-md mt-3 animate__animated animate__pulse animate__infinite"
+    style="background-color: #4CAF50; border: none; padding: 10px 25px; font-size: 1rem; border-radius: 30px;
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3); transition: all 0.3s ease;">
+    Effectuer vos achats en selectionnant les produits à droite
+    <i class="fa fa-arrow-right ms-2" aria-hidden="true"></i>
+</button>
+
+            </div>
+        </t>
+    </t>
+</templates>

@@ -1,0 +1,207 @@
+// variables.scss
+$navbar-height: 70px;
+$left-pane-width: 50%;
+$horizontal-padding: 16px;
+$zindex-dropdown: 1050;
+$primary-color: #4CAF50;
+$secondary-color: #45a049;
+$accent-color: #FF6B6B;
+$navbar-bg: rgba(255, 255, 255, 0.95);
+$submenu-bg: rgba(255, 255, 255, 0.98);
+$text-color: #2C3E50;
+$hover-color: #3498DB;
+$icon-color: #34495E;
+
+// navbar.scss
+
+// 1. Navbar Glassmorphism
+.navbar-glass {
+    backdrop-filter: blur(10px);
+    background: $navbar-bg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid rgba($primary-color, 0.2);
+    position: relative;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+// 2. Top Header
+.pos-topheader {
+    height: $navbar-height;
+    transition: all 0.3s ease-in-out;
+    background: $navbar-bg;
+    padding: 0 $horizontal-padding;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// 3. Branding Logo Text
+.pos-branding {
+    max-width: $left-pane-width;
+    display: flex;
+    align-items: center;
+
+    .logo-text {
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, $primary-color, $accent-color);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: -1px;
+
+        &::before {
+            content: '🍎';
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        &:hover {
+            transform: scale(1.05) rotate(-2deg);
+            filter: brightness(1.2);
+        }
+    }
+}
+
+// 4. Menu Button and Toggle
+.menu-button {
+    position: relative;
+    z-index: 1100;
+
+    .fa-bars {
+        font-size: 1.8rem;
+        color: $icon-color;
+        transition: all 0.3s ease;
+    }
+
+    &:hover .fa-bars {
+        color: $hover-color;
+        transform: scale(1.1);
+    }
+}
+
+.no-style-toggle {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    z-index: 1100 !important;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba($primary-color, 0.1) !important;
+    }
+}
+
+// 5. Menu and Submenu Styles
+.menu {
+    z-index: $zindex-dropdown;
+
+    .dropdown-menu {
+        backdrop-filter: blur(15px);
+        background: $submenu-bg;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        z-index: 2000;
+        padding: 0.75rem 0;
+        border: 1px solid rgba($primary-color, 0.1);
+        overflow: hidden;
+
+        .dropdown-item {
+            color: $text-color;
+            transition: all 0.3s ease;
+            padding: 12px 20px;
+            font-weight: 500;
+
+            &:hover {
+                background: linear-gradient(45deg, rgba($primary-color, 0.1), rgba($accent-color, 0.1));
+                color: $primary-color;
+                transform: translateX(5px);
+            }
+        }
+    }
+}
+
+.sub-menu {
+    top: $navbar-height;
+    right: 0;
+}
+
+// 6. Status Buttons
+.status-buttons {
+    display: flex;
+    align-items: center;
+
+    > div {
+        display: flex;
+        align-items: center;
+        padding: $horizontal-padding * 0.5;
+        margin: 0 5px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba($primary-color, 0.1);
+        }
+    }
+
+    .avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid $primary-color;
+    }
+}
+
+// 7. Global Styles
+body {
+    background: linear-gradient(135deg, #E0EAFC, #CFDEF3);
+    margin: 0;
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+// 8. Responsive Adjustments
+@media (max-width: 768px) {
+    .pos-topheader {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px;
+    }
+
+    .pos-branding {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 10px;
+
+        .logo-text {
+            font-size: 1.8rem;
+        }
+    }
+
+    .navbar-glass {
+        backdrop-filter: none;
+        background: $navbar-bg;
+    }
+
+    .menu-button .fa-bars {
+        font-size: 1.5rem;
+    }
+
+    .status-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+}

@@ -1,0 +1,97 @@
+.self_order_product_card {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+
+    &:active {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image-container {
+        position: relative;
+        overflow: hidden;
+
+        .product-image {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+    }
+
+    .o_self_order_item_card_no_image {
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            color: #999;
+            font-size: 1rem;
+            text-align: center;
+            padding: 1rem;
+        }
+    }
+
+    .product-information-tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 0.5rem;
+        border-bottom-left-radius: 8px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    .product-information-tag-logo {
+        font-size: 1rem;
+    }
+
+    .product-infos {
+        padding: 1rem;
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .product-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #4CAF50;
+    }
+
+    .out-of-stock {
+        background-color: #ff5252;
+        color: white;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+}
+
+.scale-up {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}

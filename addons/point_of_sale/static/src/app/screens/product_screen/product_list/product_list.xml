@@ -1,0 +1,77 @@
+<t t-name="point_of_sale.ProductsWidget">
+    <div class="freshmarket-products-widget d-flex flex-column flex-grow-1 overflow-hidden" t-ref="products-widget">
+        <div class="products-widget-control d-flex bg-gradient-aqua shadow-lg justify-content-between rounded-lg m-2 p-2">
+            <CategorySelector
+                categories="getCategories()"
+                onClick="(id) => this.pos.setSelectedCategoryId(id)"
+                showImage="showCategoryImages"
+                class="'category-selector'"
+            />
+            <div class="search-wrapper">
+                <Input tModel="[pos, 'searchProductWord']"
+                    class="'p-2 search-input-animate'"
+                    isSmall="ui.isSmall"
+                    placeholder="'Recherchez un produit...'"
+                    icon="{type: 'fa', value: 'fa-search'}"
+                    debounceMillis="300" />
+                <div class="water-ripple"></div>
+            </div>
+        </div>
+
+        <div class="product-list-container flex-grow-1 overflow-y-auto custom-scrollbar">
+            <div t-if="productsToDisplay.length != 0 and pos.posHasValidProduct()" t-attf-class="product-list {{this.pos.productListViewMode}} p-2 animate-fade-in">
+                <t t-foreach="productsToDisplay" t-as="product" t-key="product.id">
+                    <div class="product-card-wrapper" t-on-click="() => this.pos.addProductToCurrentOrder(product)">
+                        <ProductCard
+                            class="pos.productViewMode + ' product-card-animate'"
+                            name="product.display_name"
+                            productId="product.id"
+                            price="product.getFormattedUnitPrice()"
+                            imageUrl="pos.show_product_images and product.getImageUrl()"
+                            productInfo="true"
+                            onProductInfoClick="() => this.onProductInfoClick(product)"
+                        />
+                        <div class="product-info-overlay">
+                            <h3 class="product-name"><t t-esc="product.display_name"/></h3>
+                            <p class="product-price"><t t-esc="product.getFormattedUnitPrice()"/></p>
+                        </div>
+                        <div class="water-drop-effect"></div>
+                        <button class="product-information-button" t-on-click.stop="() => this.onProductInfoClick(product)">
+                            <i class="fa fa-info-circle"></i>
+                        </button>
+                    </div>
+                </t>
+            </div>
+
+            <div t-else="" class="product-list-empty no-results-message text-center mt-5">
+                <t t-if="searchWord">
+                    <p>No products found for <b>"<t t-esc="searchWord"/>"</b> in this category.</p>
+                </t>
+                <t t-else="">
+                    <t t-if="pos.posHasValidProduct()">
+                        <p>There are no products in this category.</p>
+                    </t>
+                    <t t-else="">
+                        <div t-if="!state.loadingDemo">
+                            <p class="text-large">No products available. Explore <a role="button" class="button-no-demo fw-bolder" t-on-click="loadDemoDataProducts">demo data</a> or <a role="button" class="button-no-demo fw-bolder" t-on-click="createNewProducts">create your own</a>.</p>
+                        </div>
+                        <div t-else="" class="block-top-header position-absolute top-0 start-0 bg-black opacity-50 w-100 h-100 z-1000">
+                            <div class="d-flex h-100 w-100 text-white flex-row align-items-center justify-content-center">
+                                <div class="o_spinner d-flex flex-column mb-4">
+                                    <img src="/web/static/img/spin.svg" alt="Loading..."/>
+                                    Loading...
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </div>
+
+            <div t-if="searchWord" class="search-more-button d-flex justify-content-center">
+                <button class="btn btn-primary btn-lg" t-on-click="onPressEnterKey">Search more</button>
+            </div>
+
+            <div class="portal search-database-button no-results-message" t-att-class="{ 'd-none':  !shouldShowButton }"></div>
+        </div>
+    </div>
+</t>

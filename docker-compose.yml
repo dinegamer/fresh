@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3'
+services:
+  web:
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=freshmarket
+      - PASSWORD=${DB_PASSWORD}
+      - DB_NAME=freshmarket
+    command: -- --workers=2
+    restart: always
+
+  db:
+    image: postgres:16.4
+    environment:
+      - POSTGRES_DB=freshmarket
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=freshmarket
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

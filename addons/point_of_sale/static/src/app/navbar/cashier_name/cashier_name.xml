@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="point_of_sale.CashierName" owl="1">
+        <div t-attf-class="btn btn-light border-0 rounded-0 cashier-container {{ cssClass }}">
+            <span class="cashier-name d-flex align-items-center gap-2">
+                <span t-attf-class="avatar {{ username[0].toUpperCase() === 'C' ? 'avatar-special' : '' }}">
+                    <t t-esc="username[0].toUpperCase()"/>
+                </span>
+                <span t-if="!ui.isSmall" class="username">
+                    <t t-esc="username"/>
+                </span>
+            </span>
+        </div>
+    </t>
+</templates>
