@@ -13,8 +13,8 @@ RUN chown -R odoo /etc/odoo/odoo.conf
 
 USER odoo
 
-# Le port que Render cherche
+# Configuration explicite du port pour Render
 ENV PORT=8069
 
-# Commande de démarrage directe d'Odoo
-CMD ["odoo", "--config=/etc/odoo/odoo.conf"]
+# Commande de démarrage modifiée pour utiliser le port de l'environnement
+CMD ["odoo", "--config=/etc/odoo/odoo.conf", "--http-port=${PORT}"]
