@@ -14,7 +14,7 @@ RUN chown -R odoo /etc/odoo/odoo.conf
 
 # Configuration du port
 ENV PORT=8069
-EXPOSE 8069
+EXPOSE ${PORT}
 
 USER odoo
 
